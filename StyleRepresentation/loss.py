@@ -9,7 +9,7 @@ from torch.autograd import Variable
 class TripletLoss(nn.Module):
     """
     Triplet loss
-    Takes embeddings of an anchor sample, a positive sample and a negatives sample
+    Takes embeddings of an anchor sample, a positive sample and a batch of negatives samples
     """
 
     def __init__(self, mode='cosine', margin=None):
