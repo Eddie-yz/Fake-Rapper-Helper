@@ -38,19 +38,3 @@ class SingleExtractor(nn.Module):
         representations = self.conv_2d(x)
 
         return representations
-
-class TripletLoss(nn.Module):
-    """
-    Triplet loss
-    Takes embeddings of an anchor sample, a positive sample and a negative sample
-    """
-
-    def __init__(self, margin = 1.0):
-        super(TripletLoss, self).__init__()
-        self.dist = nn.PairwiseDistance(p=2)
-        self.margin = margin
-
-    def forward(self, anchor, positive, negative, size_average=True):
-        distance = self.dist(anchor, positive) - self.dist(anchor, negative) + self.margin
-        losses = F.relu(distance)
-        return losses.mean() if size_average else losses.sum() 
