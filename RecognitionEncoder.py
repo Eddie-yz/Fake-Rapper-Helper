@@ -53,7 +53,7 @@ class DeepSpeech(nn.Module):
         lengths = lengths.cpu().int()
         output_lengths = self.get_seq_lens(lengths)
         x, _ = self.conv(x, output_lengths)
-        return x, output_lengths
+        return x
     
     def get_seq_lens(self, input_length):
         """

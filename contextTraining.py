@@ -1,30 +1,53 @@
-from RecognitionEncoder import deepSpeech
-def contextTraining(train_loader, rEncoder, epochs, criterion):
+from RecognitionEncoder import DeepSpeech
+import torch
+from torch.nn import MSELoss
+from torch.optim import Adam
+
+def contextTraining(out_target, input_variable, input_sizes, rEncoder, epochs, criterion,optimizer):
+    rEncoder.eval()
     for epoch in range(epochs):
-        rEncoder.train()
-        start_epoch_time = time.time()
-        for i, (data) in enumerate(train_loader):
-            state.set_training_step(training_step=i)
-            inputs, input_percentages, target_sizes = data
-            input_sizes = input_percentages.mul_(int(inputs.size(3))).int()
-            inputs = inputs.to(device)
-
-            out, output_sizes = rEncoder(inputs, input_sizes)
-
-            float_out = out.float()  # ensure float32 for loss
-            loss = criterion(float_out, output_sizes, target_sizes).to(device)
-            loss = loss / inputs.size(0)  # average the loss by minibatch
-            loss_value = loss.item()
+        optimizer.zero_grad()
+        out_variable = rEncoder(input_variable, input_sizes)
+        #print(out_variable[0][0][0][:5])
+        loss = criterion(out_variable, out_target)
+        loss = loss / input_target.size(0)  # average the loss by minibatch
+        loss_value = loss.item()
+        print("epoch:{}".format(epoch),loss_value)
+        loss.backward()
+        print(out_variable.grad, out_target.grad)
+        optimizer.step()
             
+def load_model(path):
+    print("Loading state from model %s" % path)
+    package = torch.load(path, map_location=lambda storage, loc: storage)
+    model = DeepSpeech(audio_conf=package['audio_conf'])
+    model.load_state_dict(package['state_dict'], strict=False)
+    return model
+
 if __name__ == "__main__":
-    rEncoder = load_model('librispeech_pretrained_v2.pth')
+    # load model parameters
+    rEncoder = load_model('../deepspeech/librispeech_pretrained_v2.pth')
     device = torch.device("cuda")
     rEncoder = rEncoder.to(device)
-    print(model.audio_conf)
+    print(rEncoder.audio_conf)
 
-    minibatch_size = 8
+    # TODO hyperparameters
+    minibatch_size = 1
     freq_size = 16000
-    max_seqlength = 100
-    cur_seqlength = torch.LongTensor([90]*minibatch_size)
-    inputs = torch.rand(minibatch_size, 1, freq_size, max_seqlength).to(device)
+    max_seqlength = 100 
+    lengths = 90        
+    input_sizes = torch.LongTensor([lengths]*minibatch_size)
+    
+    # random variable
+    from torch.autograd import Variable
+    input_variable = Variable(torch.randn(minibatch_size, 1, freq_size, max_seqlength,requires_grad=True)).to(device)
+    input_target = torch.randn(minibatch_size, 1, freq_size, max_seqlength, requires_grad=False).to(device) # TODO:target
+    
+    criterion = MSELoss()
+    optimizer = Adam([input_variable],lr=0.0001)
+    
+    rEncoder_target = load_model('../deepspeech/librispeech_pretrained_v2.pth')
+    rEncoder_target = rEncoder_target.to(device)
+    out_target = Variable(rEncoder_target(input_target, input_sizes))
+    contextTraining(out_target, input_variable, input_sizes, rEncoder, 5, criterion, optimizer)
     
