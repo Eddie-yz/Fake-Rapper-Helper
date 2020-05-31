@@ -40,8 +40,8 @@ if __name__ == "__main__":
     
     # random variable
     from torch.autograd import Variable
-    input_variable = Variable(torch.randn(minibatch_size, 1, freq_size, max_seqlength,requires_grad=True)).to(device)
     input_target = torch.randn(minibatch_size, 1, freq_size, max_seqlength, requires_grad=False).to(device) # TODO:target
+    input_variable = Variable(torch.randn(input_target.shape).cuda(),requires_grad=True)
     
     criterion = MSELoss()
     optimizer = Adam([input_variable],lr=0.0001)
