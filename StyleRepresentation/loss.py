@@ -9,7 +9,7 @@ from torch.autograd import Variable
 class TripletLoss(nn.Module):
     """
     Triplet loss
-    Takes embeddings of an anchor sample, a positive sample and a batch of negatives samples
+    Takes embeddings of an anchor sample, a positive sample and a negatives sample
     """
 
     def __init__(self, mode='cosine', margin=None):
@@ -24,7 +24,7 @@ class TripletLoss(nn.Module):
         else:
             self.margin = margin
 
-    def forward(self, anchor, positive, negatives, size_average=True):
+    def forward(self, anchor, positive, negatives, max_margin=True):
         if anchor.size()[1] == 1 and positive.size()[1] == 1 and negatives.size()[1] == 1:
             anchor = anchor.squeeze(1)
             positive = positive.squeeze(1)
@@ -37,8 +37,7 @@ class TripletLoss(nn.Module):
             negatives_num = negatives.size(0)
             distance = torch.zeros(negatives_num)
             for i in range(negatives_num):
-                distance[i] = -torch.dot(anchor[0], negatives[i]) + self.margin
-            distance = torch.dot(anchor[0], positive[0]) + distance
+                distance[i] = torch.dot(anchor[0], negatives[i])/(torch.norm(anchor[0])*torch.norm(negatives[i])) + self.margin
+            distance = -torch.dot(anchor[0], positive[0])/(torch.norm(anchor[0])*torch.norm(positive[0])) + distance
             losses = F.relu(distance)
-        
-        return losses.mean() if size_average else losses.sum() 
+        return losses.max() if max_margin else losses.mean() 
