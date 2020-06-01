@@ -168,9 +168,9 @@ class ResNet_StyleExtractor_1(nn.Module):
             x = nn.MaxPool1d(x.size(-1))(x)
         x = x.squeeze(2)
 
-        # fully connected / just return the last fc layer as stylr representations 
+        # fully connected / just return the last fc layer as style representations 
         x = self.fc_1(x)
-        x = self.bn(x)
+        # x = self.bn(x)
         x = self.activation(x)
 
         #x = self.relu(x)
