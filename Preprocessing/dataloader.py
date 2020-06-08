@@ -140,6 +140,8 @@ class SpectrogramDataset(Dataset, SpectrogramParser):
         self.pos_dir = pos_dir
         self.neg_dir = neg_dir
         self.pos_files = os.listdir(pos_dir)
+        _sample = np.load(path.join(self.pos_dir,self.pos_files[0]))
+        self.sample_size = _sample.shape
         if self.neg_dir:
             self.neg_files = os.listdir(neg_dir)
             self.size = min(len(self.pos_files),len(self.neg_files))
