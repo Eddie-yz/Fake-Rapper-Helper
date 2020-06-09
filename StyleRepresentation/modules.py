@@ -110,12 +110,14 @@ class HarmonicSTFT(nn.Module):
         self.zero = torch.zeros(1)
         self.zero = self.zero.to(device)
 
-    def forward(self, waveform):
+    # def forward(self, waveform):
+    def forward(self, spectrogram):
         # stft
-        spectrogram = self.spec(waveform)
+        # spectrogram = self.spec(waveform)
 
         # to device
-        self.to_device(waveform.device, spectrogram.size(1))
+        # self.to_device(waveform.device, spectrogram.size(1))
+        self.to_device(spectrogram.device, spectrogram.size(1))
 
         # triangle filter
         harmonic_fb = self.get_harmonic_fb()
