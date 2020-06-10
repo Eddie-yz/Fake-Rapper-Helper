@@ -4,7 +4,7 @@ import numpy as np
 
 
 class MTATDataset(Dataset):
-    def __init__(self, audio_conf, pos_dir, neg_dir=None, negative_sample_size=4):
+    def __init__(self, pos_dir, neg_dir=None, negative_sample_size=4):
         self.pos_dir = pos_dir
         self.neg_dir = neg_dir
         self.pos_files = os.listdir(pos_dir)
@@ -22,7 +22,8 @@ class MTATDataset(Dataset):
         pos = np.load(os.path.join(self.pos_dir, self.pos_files[2*index+1]))
         negs = []
         for k in range(self.negative_sample_size):
-            negs.append(np.load(os.path.join(self.neg_dir, self.neg_files[self.negative_sample_size*index+k])))
+            neg = np.load(os.path.join(self.neg_dir, self.neg_files[self.negative_sample_size*index+k]))
+            negs.append(neg)
         negs = np.array(negs)
 
         return anchor, pos, negs
