@@ -71,10 +71,10 @@ class HarmonicSTFT(nn.Module):
         self.bw_beta = 24.7
 
         # Spectrogram
-        self.spec = torchaudio.transforms.Spectrogram(n_fft=n_fft, win_length=win_length,
-                                                      hop_length=None, pad=0,
-                                                      window_fn=torch.hann_window,
-                                                      power=power, normalized=normalized, wkwargs=None)
+#         self.spec = torchaudio.transforms.Spectrogram(n_fft=n_fft, win_length=win_length,
+#                                                       hop_length=None, pad=0,
+#                                                       window_fn=torch.hann_window,
+#                                                       power=power, normalized=normalized, wkwargs=None)
         self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
 
         # Initialize the filterbank. Equally spaced in MIDI scale.
@@ -107,8 +107,7 @@ class HarmonicSTFT(nn.Module):
         # fft bins
         self.fft_bins = torch.linspace(0, self.sample_rate//2, n_bins)
         self.fft_bins = self.fft_bins.to(device)
-        self.zero = torch.zeros(1)
-        self.zero = self.zero.to(device)
+        self.zero = torch.zeros(1).to(device)
 
     # def forward(self, waveform):
     def forward(self, spectrogram):
