@@ -12,10 +12,11 @@ class TripletLoss(nn.Module):
     Takes embeddings of an anchor sample, a positive sample and a negatives sample
     """
 
-    def __init__(self, mode='cosine', margin=None):
+    def __init__(self, mode='cosine', margin=None, device='cpu'):
         super(TripletLoss, self).__init__()
         self.l2 = nn.PairwiseDistance(p=2)
         self.mode = mode
+        self.device = device
         if margin is None:
             if mode == 'cosine':
                 self.margin = 0.4
@@ -35,7 +36,7 @@ class TripletLoss(nn.Module):
             losses = F.relu(distance)
         elif self.mode == 'cosine':
             negatives_num = negatives.size(0)
-            distance = torch.zeros(negatives_num)
+            distance = torch.zeros(negatives_num, dtype=torch.float32, requires_grad=True).to(self.device)
             for i in range(negatives_num):
                 distance[i] = torch.dot(anchor[0], negatives[i])/(torch.norm(anchor[0])*torch.norm(negatives[i])) + self.margin
             distance = -torch.dot(anchor[0], positive[0])/(torch.norm(anchor[0])*torch.norm(positive[0])) + distance
