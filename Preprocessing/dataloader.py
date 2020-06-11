@@ -10,7 +10,9 @@ from torch.utils.data import Dataset
     
 # deepspeech   
 def load_audio(path, audiotime):
-    sample_rate, sound = read(path)
+    # sample_rate, sound = read(path)
+    sound, sample_rate = librosa.load(path, sr=16000)
+    
     sound = sound.astype('float32') / 32767  # normalize audio
     if len(sound.shape) > 1:
         if sound.shape[1] == 1:
