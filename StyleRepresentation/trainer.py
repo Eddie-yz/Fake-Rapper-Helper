@@ -16,7 +16,7 @@ from loss import TripletLoss
 class Trainer(object):
     def __init__(self, dataloader, negative_sample_size=4, \
                  n_epochs=500, loss_mode='cosine', \
-                 starting_lr=1e-3, device='cpu'):
+                 starting_lr=1e-3, device='cpu', margin=0.4):
         self.model = SingleExtractor(conv_channels=128,
                                      sample_rate=16000,
                                      n_fft=513,
@@ -26,7 +26,7 @@ class Trainer(object):
         self.device = device
         self.negative_sample_size = negative_sample_size
         self.n_epochs = n_epochs
-        self.criterion = TripletLoss(mode=loss_mode, device=self.device)
+        self.criterion = TripletLoss(mode=loss_mode, device=self.device, margin=margin)
         self.optimizer = Adam(self.model.parameters(), lr=starting_lr, weight_decay=1e-4)
         self.current_optimizer = 'adam'
         self.drop_counter = 0
