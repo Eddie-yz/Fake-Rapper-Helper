@@ -33,6 +33,8 @@ class Trainer(object):
         self.trianing_loss = []
         self.best_train_loss = 100
         self.model_save_path = 'checkpoints'
+        if not os.path.exists(self.model_save_path):
+            os.mkdir(self.model_save_path)
         self.dataloader = dataloader
          
     def optimizerScheduler(self):
@@ -90,7 +92,7 @@ class Trainer(object):
                 if epoch_loss[-1] < self.best_train_loss:
                     self.best_train_loss = epoch_loss[-1]
                     torch.save(self.model.state_dict(),\
-                               os.path.join(self.model_save_path, f'best_training_model_epoch{epoch}_iter{i}.pth'))
+                               os.path.join(self.model_save_path, f'best_training_model_epoch{epoch}_iter{i}_loss{epoch_loss[-1]}.pth'))
                     
             self.trianing_loss.append(np.mean(epoch_loss))
             self.optimizerScheduler()
