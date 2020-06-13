@@ -86,7 +86,8 @@ def calculateCosineDistMat(data):
             if i == j:
                 dist[i, j] = .0
                 continue
-            d = np.dot(audio_embeddings[i], audio_embeddings[j])/(np.linalg.norm(audio_embeddings[i]) * np.linalg.norm(audio_embeddings[j]))
+            cosSim = np.dot(audio_embeddings[i], audio_embeddings[j])/(np.linalg.norm(audio_embeddings[i]) * np.linalg.norm(audio_embeddings[j]))
+            d = 10/(1+np.exp(10*cosSim))
             dist[i, j] = d
             dist[j, i] = d
     return dist
