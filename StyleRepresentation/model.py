@@ -8,8 +8,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-from modules import HarmonicSTFT
-from modules import ResNet_StyleExtractor_1 as ResNet
+from StyleRepresentation.modules import HarmonicSTFT
+from StyleRepresentation.modules import ResNet_StyleExtractor_1 as ResNet
 
 class SingleExtractor(nn.Module):
     def __init__(self, 

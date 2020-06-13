@@ -50,7 +50,8 @@ class DeepSpeech(nn.Module):
             nn.Hardtanh(0, 20, inplace=True)
         ))
     def forward(self, x, lengths):
-        lengths = lengths.cpu().int()
+        # lengths = lengths.cpu().int()
+        lengths = lengths.int()
         output_lengths = self.get_seq_lens(lengths)
         x, _ = self.conv(x, output_lengths)
         return x
@@ -67,4 +68,4 @@ class DeepSpeech(nn.Module):
             if type(m) == nn.modules.conv.Conv2d:
                 seq_len = ((seq_len + 2 * m.padding[1] - m.dilation[1] * (m.kernel_size[1] - 1) - 1) / m.stride[1] + 1)
         return seq_len.int()
-        
+        # return int(seq_len)
