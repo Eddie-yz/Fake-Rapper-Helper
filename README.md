@@ -15,7 +15,7 @@ A Dual Convolutional Neural Network for Specific Style Music Generation from an 
 
 
 ### Style Encoder
-
+The aim of our style transformer is to learn a special encoding of the input audio. And this encoding should act as a latent feature representation of the music style (especially for the hip-hop style) of theinput.
 
 
 ### Content Encoder
