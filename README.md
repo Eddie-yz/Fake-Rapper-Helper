@@ -10,6 +10,8 @@ A Dual Convolutional Neural Network for Specific Style Music Generation from an 
 
 [4. Overall Music Generating Framework](#music-generation)
 
+[5.Codes](#code)
+
 
 ### Prepare Data
 - The content encoder is pretrained on LibriSpeech dataset which is often used in ASR. It contains 1000 hours of English speech with a unversal sampling rate of 16k.
@@ -37,3 +39,27 @@ The generation procedure is described below where the gradient descent updating 
 ![](pic/generation.png)
 
 ![](pic/triplet.png)
+
+
+
+### Codes
+
+- To train style encoder network: 
+
+  ```python
+  styleRepresentation/styleEncoderTraining.ipynb
+  ```
+
+- To visualize the results of different loss functions and hyper-parameters for style encoder:
+
+  ```python
+  styleRepresentation/embeddingPlot.ipynb
+  ```
+
+- To generate a music clip from the pretrained style encoder and content encoder:
+
+  ```python
+  train.ipynb
+  ```
+
+  
