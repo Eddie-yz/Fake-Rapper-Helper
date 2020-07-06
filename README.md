@@ -34,3 +34,6 @@ A Dual Convolutional Neural Network for Specific Style Music Generation from an 
 
 ### Music Generation
 The generation procedure is described below where the gradient descent updating is performed on the target output with respect to the content and style loss.
+![](pic/generation.png)
+
+![](pic/triplet.png)
