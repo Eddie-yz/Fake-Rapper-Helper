@@ -15,7 +15,12 @@ A Dual Convolutional Neural Network for Specific Style Music Generation from an 
 
 
 ### Style Encoder
-The aim of our style transformer is to learn a special encoding of the input audio. And this encoding should act as a latent feature representation of the music style (especially for the hip-hop style) of theinput.
+The aim of our style transformer is to learn a special encoding of the input audio. And this encoding should act as a latent feature representation of the music style (especially for the hip-hop style) of the input. 
+
+Domain knowledge can be very helpful for extracting acoustic features from music. To facilitate more efficient representation learning, the learnable harmonic filters from\cite{won2020data} are adopted in this work. The output of the harmonic filters is a harmonic tensor with a size of H * F * T.  After computing the harmonic tensor, we treat the harmonics here as different channels and send them into a 2D CNN module. This enforces the convolutional filters to embed harmonic information with locality in time and frequency domain.
+
+To enhance the discriminant ability of the style encoder, we adopt the Siamese network framework to train our model. It is set up to take three examples: anchor, positive sample and negative sample. The anchor and the positive sample are both clips of hip-hop songs, and the negative sample should be a clip from a song with any styles other than hip-hop. The style representations of three input items will then be used for calculating triplet loss.
 
 
 ### Content Encoder
+
