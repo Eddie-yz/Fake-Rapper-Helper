@@ -10,7 +10,7 @@ A Dual Convolutional Neural Network for Specific Style Music Generation from an 
 
 [4. Overall Music Generating Framework](#music-generation)
 
-[5.Codes](#code)
+[5. Codes](#code)
 
 
 ### Prepare Data
