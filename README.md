@@ -8,6 +8,8 @@ A Dual Convolutional Neural Network for Specific Style Music Generation from an 
 
 [3.Content Preserver Branch](#content-encoder)
 
+[4. Overall Music Generating Framework](#music-generation)
+
 
 ### Prepare Data
 - The content encoder is pretrained on LibriSpeech dataset which is often used in ASR. It contains 1000 hours of English speech with a unversal sampling rate of 16k.
@@ -21,8 +23,14 @@ A Dual Convolutional Neural Network for Specific Style Music Generation from an 
 
 - To enhance the discriminant ability of the style encoder, we adopt the Siamese network framework to train our model. It is set up to take three examples: anchor, positive sample and negative sample. The anchor and the positive sample are both clips of hip-hop songs, and the negative sample should be a clip from a song with any styles other than hip-hop. The style representations of three input items will then be used for calculating triplet loss.
 
-![](pic/styleEnd.png)
+![](pic/styleEnc.png)
 
 
 ### Content Encoder
+- To enforce an invariant quantity, the content of the speech, we design a recognition network which basically adopted from a pre-trained CNN encoder of an Automatic Speech Recognition end-to-end model. 
+- The encoder takes the original speech spectrogram and the randomly initialized target spectrogram as inputs. It outputs the corresponding hidden states of the input signals.
+- We then measure the Mean Square Error between the content representation vectors as the measure of the distance between the speech spectrogram and the desired spectrogram. We freeze the encoder network and the cosine similarity loss would be back-propagated to update the target spectrogram.
 
+
+### Music Generation
+The generation procedure is described below where the gradient descent updating is performed on the target output with respect to the content and style loss.
